@@ -1,15 +1,15 @@
-# Advanced Database Systems
-    Module Leader: Dhouha Kbaier
-    Level: 5
-    Assessment Title:Project with Report
-    Issue Date: January 2024
-    Hand In Date: 5th April 2024 before 4pm (UK local time)
-    Student : Stefan Lenta
-    Application Link : https://adb-db-stefan-lenta-936fbd902e10.herokuapp.com
+# Advanced Database Systems Project
 
+### Module Information
+- **Module Leader:** Dhouha Kbaier
+- **Level:** 5
+- **Assessment Title:** Project with Report
+- **Issue Date:** January 2024
+- **Hand In Date:** 5th April 2024 before 4pm (UK local time)
+- **Student:** Stefan Lenta
+- **Application Link:** [Link to Web-App](https://adb-db-stefan-lenta-936fbd902e10.herokuapp.com)
 
-
-# Introduction
+## Introduction
 
 In todays digital landscape, the automotive sector utilises the power of online platforms, transforming the way people share and discover insights about vehicles. This evolution created a big demand for an advanced, intuitive platform that is dedicated to facilitating comprehensive car reviews. 
 
@@ -17,7 +17,7 @@ As a student deeply interested in the both technology and automobiles, I found  
 
 At the core of the project we have car_database which haas three designed collections: car_reviews, car, and users. Each collection has different purposes, such as ensuring the platform can store and manage a wide range of data, from detailed car reviews to user profiles. The car_reviews collection, for example, not only stores user-generated content about different cars but also establishes a dynamic relationship between reviews and cars, as well as between reviews and users
 
-## Technologies Used:
+## Technologies Used
 
 - **Node.js:**  JavaScript runtime environment that executes JavaScript code outside a web browser.
 - **Express:** A web app framework for Node.js, designed for building web applications and APIs.
@@ -25,7 +25,56 @@ At the core of the project we have car_database which haas three designed collec
 - **Bcrypt:** Secure password hashing algorithm.
 - **Express-session:** Express middleware for managing sessions.
 - **Body-parser:** Express middleware for parsing request bodies.
+- **Bootstrap 4:** Make interface modern and friendly
+- **MongoDB / MongoDB Atlas:** Depending on running environment Local/Production
 
+##
+
+# How to for Local Development
+
+## Requirements:
+- [Node.js](https://nodejs.org/) installed
+- MongoDB installed locally or a MongoDB Atlas account for the database
+
+## Step 1: Clone the Project Repository
+```bash
+git clone <repository-url>
+cd <project-directory>
+```
+### Step 2: Install Dependencies:
+```bash
+npm install
+
+```
+### Step 2: Install Dependencies:
+```cmd
+npm install
+```
+### Step 3: Configure MongoDB Connection
+
+For local development use MongoDB compass. Make sure MongoDB is running.
+
+Alternatively,for production use MongoDB Atlas, just replace the connection string in app.js with your Atlas connection string.
+
+### For local MongoDB:
+```js
+mongoose.connect('mongodb://localhost:27017/car_database', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+```
+### For MongoDB Atlas:
+```js
+mongoose.connect('your_atlas_connection_string', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+```
+
+### Step 5: Running the Application
+```cmd
+node app.js
+```
 
 
 ## Database Name: car_database:
@@ -79,8 +128,13 @@ Has user information, including authentication and preference data.
 ##### Relationships:
 
 - Many-to-many relationship with car_reviews through likes and dislikes. Users can interact with multiple reviews by liking or disliking them, and their IDs are stored in the `likedBy` and `dislikedBy` fields of the car_reviews collection.
+#
 
-### Initial Configuration
+#
+ 
+#
+
+# Project development:
 
 ```javascript
 const express = require('express');
