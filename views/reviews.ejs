@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Reviews</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link" href="/">About us</a>
+                    <% if (!loggedIn) { %>
+                        <a class="nav-link" href="/login">Login</a>
+                        <a class="nav-link" href="/register">Register</a>
+                    <% } %>
+                    <% if (loggedIn) { %>
+                        <a class="nav-link" href="/logout">Logout</a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+
+    <style>
+        .card-square .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+        .review-footer {
+            margin-top: auto;
+        }
+    </style>
+
+    <div class="container mt-3">
+        <select id="sortReviews" class="form-select">
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="mostLiked">Most Liked</option>
+            <option value="mostDisliked">Most Disliked</option>
+        </select>
+    </div>
+    <script>
+        document.getElementById('sortReviews').addEventListener('change', function() {
+            const selectedSort = this.value;
+            window.location.href = `?sort=${selectedSort}`;
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortParam = new URLSearchParams(window.location.search).get('sort');
+            if (sortParam) {
+                document.getElementById('sortReviews').value = sortParam;
+            }
+        });
+    </script>
+
+    <div class="container">
+        <h1>Reviews for <%= car.make %> <%= car.model %> <%= car.year %></h1>
+        <div class="row">
+            <% reviews.forEach(function(review, index) { %>
+                <div class="col-6 col-sm-4 col-md-3 mb-4">
+                    <div class="card card-square" style="cursor: pointer;" data-toggle="modal" data-target="#reviewModal<%= index %>">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= review.review_title.substring(0, 120) %><%= review.review_title.length > 120 ? '...' : '' %></h5>
+                            <p class="card-text"><%= review.review_body.substring(0, 120) %><%= review.review_body.length > 120 ? '...' : '' %></p>
+                            <p class="card-text"><small class="text-muted">By <%= review.author %> on <%= review.date_posted.toDateString() %></small></p>
+                            <div class="d-flex justify-content-start align-items-center mt-2">
+                                <form action="/reviews/<%= review._id %>/like" method="POST" class="mr-2">
+                                    <button type="submit" class="btn btn-outline-success btn-sm">Like</button>
+                                </form>
+                                <span class="badge bg-success mr-2"><%= review.likes %></span>
+                                <form action="/reviews/<%= review._id %>/dislike" method="POST" class="mr-2">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Dislike</button>
+                                </form>
+                                <span class="badge bg-danger"><%= review.dislikes %></span>
+                                <% if (isAdmin) { %>
+                                    <form action="/reviews/<%= review._id %>/delete" method="POST">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                <% } %>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="reviewModal<%= index %>" tabindex="-1" aria-labelledby="reviewModalLabel<%= index %>" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="reviewModalLabel<%= index %>"><%= review.review_title %></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p><%= review.review_body %></p>
+                                <p>Rating: <%= review.rating %></p>
+                                <p>Author: <%= review.author %></p>
+                                <p>Date Posted: <%= review.date_posted.toDateString() %></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+            
+        </div>
+    </div>
+
+    <% if (loggedIn) { %>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <h2 class="text-center mb-4">Submit a Review</h2>
+                    <form action="/submit-review" method="POST" class="mb-3">
+                        <input type="hidden" name="car_id" value="<%= car._id %>">
+                        <div class="form-group mb-3">
+                            <label for="review_title" class="form-label">Review Title:</label>
+                            <input type="text" id="review_title" name="review_title" class="form-control" maxlength="20" title="Title must be up to 20 characters long" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="review_body" class="form-label">Review Body:</label>
+                            <textarea id="review_body" name="review_body" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="rating" class="form-label">Rating:</label>
+                            <input type="number" id="rating" name="rating" class="form-control" step="0.1" min="0" max="5" required>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit Review</button>
+                        </div>
+                    </form>
+                    <div id="confirmationMessage" class="alert alert-success" style="display: none;">
+                        Review submitted successfully!
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } else { %>
+        <div class="text-center">
+            <p>You must be <a href="/login">logged in</a> to submit a review.</p>
+        </div>
+    <% } %>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
