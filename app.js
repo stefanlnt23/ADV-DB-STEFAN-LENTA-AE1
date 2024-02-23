@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 // connect to MongoDB
-mongoose.connect('mongodb://localhost/car_database', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/car_database', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
