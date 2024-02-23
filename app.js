@@ -5,7 +5,7 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
 const methodOverride = require('method-override');
@@ -32,5 +32,5 @@ const indexRoutes = require('./routes/index');
 app.use('/', indexRoutes);
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on port ${port}`);
 });
