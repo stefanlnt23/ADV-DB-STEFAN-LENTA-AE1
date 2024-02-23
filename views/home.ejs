@@ -35,21 +35,36 @@
           border-radius: 10px;
           box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       }
-      /* New styles for mobile */
       @media (max-width: 768px) {
-          .navbar-nav .nav-link, .navbar-toggler {
-              font-size: 1.2em; /* Increase font size */
-              padding: 10px 15px; /* Increase padding */
-          }
-          .centered-form, .centered-form .form-control, .centered-form .btn {
-              font-size: 1.2em; /* Increase form text size */
-              padding: 15px; /* Increase form padding */
-          }
-          .centered-form .form-group {
-              margin-bottom: 20px; /* Increase space between form elements */
-          }
-      }
-  </style>
+        .navbar-nav .nav-link {
+            font-size: 20px;
+            padding: 15px 20px;
+        }
+        
+        .navbar-toggler {
+            font-size: 1.5em;
+            padding: .25rem .75rem;
+        }
+        
+        .navbar-toggler-icon {
+            width: 30px;
+            height: 30px;
+            background-size: 30px 30px;
+        }
+
+        .centered-form .form-control, .centered-form .btn {
+            font-size: 18px;
+            padding: 15px;
+            height: auto;
+        }
+        
+        .centered-form {
+            padding: 30px;
+            margin: 0 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    }
+</style>
   
 </head>
 <body>
